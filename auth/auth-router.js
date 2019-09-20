@@ -6,7 +6,7 @@ const bc = require('bcryptjs');
 router.post('/register', (req, res) => {
   // implement registration
   const user = req.body
-  user.password = bc.hashSync(user.password, 14);
+  user.password = bc.hashSync(user.password, 8);
   Users.addUser(user)
   .then(result =>{
     res.status(201).json(result)
