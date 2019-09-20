@@ -12,7 +12,7 @@ describe('/auth', () => {
                 name: 'Tommy',
                 password: 'password'
             }
-            request(server).post('/api/auth/register').send(newUser).then(res => expect(res.status).toEqual(200))
+            request(server).post('/api/auth/register').send(newUser).then(res => expect(res.status).toEqual(201))
         })
 
         it('should return an id when a user is registered', () => {
@@ -31,24 +31,20 @@ describe('/auth', () => {
                 password: 'password'
             }
             request(server).post('/api/auth/register').send(newUser).then(res => {
-                expect(res.status).toEqual(200)
+                expect(res.status).toEqual(201)
                 request(server).post('/api/auth/login').send(newUser).then(result => {
                     expect(result.status).toEqual(201)
                 })    
             })
         }),
 
-        it('should login a user and return a token', () => {
+        it('should login a user and return a token', async () => {
             const newUser = {
                 name: 'Tommy',
                 password: 'password'
             }
-            request(server).post('/api/auth/register').send(newUser).then(res => {
-                expect(res.status).toEqual(200)
-                request(server).post('/api/auth/login').send(newUser).then(result => {
-                    expect(result.authorization);
-                })    
-            })
+            await request(server).post('/api/auth/register').send(newUser).then(res => expect(res.status).toEqual(201))
+            await request(server).post('/api/auth/login').send(newUser).then(result => expect(result.authorization))   
         })
     })
 })
